@@ -1,0 +1,172 @@
+﻿<Page x:Class="ArmaLauncher.ServersGridOptimization"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ArmaLauncher="clr-namespace:ArmaLauncher" xmlns:clr="clr-namespace:ArmaLauncher.Helpers"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:custom="clr-namespace:ArmaLauncher.Behaviors" mc:Ignorable="d" 
+      Title="Servers">
+    <Grid>
+        <Grid x:Name="gdServers">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition MinWidth="300" Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition MinHeight="300" Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0">
+                <TextBlock Grid.Column="0" Grid.Row="0" Height="25" Text="Searching..." HorizontalAlignment="Left" VerticalAlignment="Top" Width="100">
+                    <TextBlock.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearching}" Value="true">
+                                    <Setter Property="TextBlock.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSearching}" Value="false">
+                                    <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock Height="25" Text="Results: " HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" />
+                    <TextBlock Height="25" Text="{Binding ElementName=dgServers, Path=Items.Count}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
+                    <StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearching}" Value="true">
+                                    <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSearching}" Value="false">
+                                    <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasFirstSearchInitiated}" Value="true">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding HasFirstSearchInitiated}" Value="false">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
+                <TextBox x:Name="tbSearchFilter" Height="25" Text="" TextChanged="SearchTextBox_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="{StaticResource SearchFilter}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" MinWidth="200" Orientation="Horizontal">
+                <Button x:Name="btnGetArma2List" Content="Arma2 List" Click="btnGetArma2List_Click" Margin="0,0,0,0" Height="25"/>
+                <Button x:Name="btnGetArma3List" Content="Arma3 List" Click="btnGetArma3List_Click" Margin="10,0,0,0" Height="25" Canvas.Left="95"/>
+            </StackPanel>
+            <DataGrid x:Name="dgServers" Grid.Column="1" Grid.Row="1" Margin="10" MinHeight="300" MinWidth="300" AutoGenerateColumns="false" 
+                      ItemsSource="{Binding}" 
+                      SelectionMode="Single" 
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True"
+                      MinRowHeight="25" RowHeight="25" 
+                      RowHeaderWidth="0"
+                      RowBackground="{x:Null}"
+                      ScrollViewer.CanContentScroll="True" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.IsDeferredScrollingEnabled="True"
+                      HorizontalGridLinesBrush="Black"
+                      VerticalGridLinesBrush="Black"
+                      EnableColumnVirtualization="True"
+                      EnableRowVirtualization="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      MouseDoubleClick="dgServers_MouseDoubleClick"
+                      SelectedItem="{Binding Path=DataGridSelectedItem}" 
+                      clr:Commands.DataGridDoubleClickCommand="{Binding DataGridDoubleClick}">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="DataGrid">
+                        <Setter Property="EnableColumnVirtualization" Value="True" />
+                        <Setter Property="EnableRowVirtualization" Value="True" />
+                        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
+                        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling" />
+                        <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                <Setter Property="DataGrid.Cursor" Value="Wait"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="PingServer_Click">
+                                    <Image Source="{Binding ServerRefreshPingImage, Source={x:Static ArmaLauncher:Globals.Current}}"/>
+                                    <Button.ToolTip>
+                                        <TextBlock Text="ping"/>
+                                    </Button.ToolTip>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="fav" SortMemberPath="fav">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Style="{StaticResource styleFavoriteCheckBox}"
+                                          IsChecked="{Binding Metadata.IsFavorite, Mode=TwoWay}" 
+                                          Checked="Checked_FavoriteServer"
+                                          Unchecked="Checked_FavoriteServer">
+                                    <CheckBox.ToolTip>
+                                        <TextBlock Text="favorite"/>
+                                    </CheckBox.ToolTip>
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="notes" SortMemberPath="notes">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="cbNotesServer"                           
+                                          Style="{StaticResource styleNotesCheckBox}" 
+                                          Click="Click_NotesServer"
+                                          IsChecked="{Binding Metadata.HasNotes, Mode=OneWay}">
+                                    <CheckBox.ToolTip>
+                                        <TextBlock Text="notes"/>
+                                    </CheckBox.ToolTip>
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding name, Mode=TwoWay}" Header="name" />
+                    <DataGridTextColumn Binding="{Binding host, Mode=TwoWay}" Header="ip" />
+                    <DataGridTextColumn Binding="{Binding port, Mode=TwoWay}" Header="port" />
+                    <DataGridTextColumn Binding="{Binding Metadata.LastPlayed, Mode=TwoWay}" Header="Last Played" />
+                    <DataGridTextColumn Binding="{Binding Metadata.Ping, Mode=TwoWay}" Header="ping" />
+                    <DataGridTextColumn Binding="{Binding players, Mode=TwoWay}" Header="players" />
+                    <DataGridTextColumn Binding="{Binding passworded, Mode=TwoWay}" Header="password" />
+                    <DataGridTextColumn Binding="{Binding country, Mode=TwoWay}" Header="country" />
+                    <DataGridTextColumn Binding="{Binding mission, Mode=TwoWay}" Header="mission" />
+                    <DataGridTextColumn Binding="{Binding island, Mode=TwoWay}" Header="map" />
+                    <DataGridTextColumn Binding="{Binding version, Mode=TwoWay}" Header="version" />
+                    <DataGridTextColumn Binding="{Binding mod, Mode=TwoWay}" Header="mods" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Page>

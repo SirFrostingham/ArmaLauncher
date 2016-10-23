@@ -1,0 +1,546 @@
+﻿<Page x:Class="ArmaLauncher.Notes"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ArmaLauncher="clr-namespace:ArmaLauncher" xmlns:clr="clr-namespace:ArmaLauncher.Helpers"
+      xmlns:viewModel="clr-namespace:ArmaLauncher.ViewModel"
+      xmlns:Behaviors="clr-namespace:ArmaLauncher.Behaviors"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:converters="clr-namespace:ArmaLauncher.Converters"
+      xmlns:control="clr-namespace:LoadingControl.Control"
+      xmlns:models="clr-namespace:ArmaLauncher.Models"
+      mc:Ignorable="d" 
+      Title="Notes"
+      Loaded="Notes_OnLoaded">
+
+    <Page.Resources>
+
+        <ObjectDataProvider x:Key="gameTypeData"
+                            MethodName="GetValues" 
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:GameType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <converters:EnumToFriendlyNameConverter x:Key="enumItemsConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid x:Name="gdNotes">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition MinWidth="800" Width="*" />
+                <!--TODO:areed wire in mod selector-->
+                <!--<ColumnDefinition MinWidth="600" Width="600" />-->
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition MinHeight="300" Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                <!--<TextBlock Grid.Column="0" Grid.Row="0" Height="25" Text="Searching..." HorizontalAlignment="Left" VerticalAlignment="Top" Width="75">
+                    <TextBlock.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="TextBlock.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                    <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>-->
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock Height="25" Text="Results: " HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" />
+                    <TextBlock Height="25" Text="{Binding ElementName=MainDataGrid, Path=Items.Count}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
+                    <!--<StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ViewModel.HasFirstSearchInitiated, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.HasFirstSearchInitiated, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                    <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>-->
+                </StackPanel>
+                <!--<StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=ViewModel.HasFirstSearchInitiated, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=ViewModel.HasFirstSearchInitiated, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>-->
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical">
+                <Button x:Name="StopSearchingButton" Content="Stop Searching" Command="{Binding Path=ViewModel.StopSearchingClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" />
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2">
+                <Label Content="Game Type: " FontWeight="Bold" Height="24" Width="Auto" />
+                <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
+                    <ComboBox x:Name="ddGameType" 
+                              ItemsSource="{Binding Source={StaticResource gameTypeData}}" 
+                              SelectedItem="{Binding ArmaGameType, Source={x:Static ArmaLauncher:Globals.Current}, Mode=TwoWay}"  
+                              Margin="0,10,10,10" Height="24" Width="100" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding Path=ViewModel.DdGameTypeSelectionChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Servers}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label  Content="{Binding Path=., Mode=OneWay, 
+                                        Converter={StaticResource enumItemsConverter}}"
+                                        Height="Auto"
+                                        Margin="0" 
+                                        VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Left">
+                    <TextBox x:Name="tbSearchFilter" Height="25" 
+                             Text="{Binding Path=ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" 
+                             HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyUp">
+                                <i:InvokeCommandAction Command="{Binding Path=ViewModel.SearchTextBoxTextChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="">
+                                        <Setter Property="Background" Value="{StaticResource SearchFilter}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                        <TextBox.CaretBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="YellowGreen" Offset="0" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBox.CaretBrush>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Height="25" Text="Pinging: " HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBlock Height="25" Text="{Binding Path=ViewModel.PingCurrentIndex, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBlock Height="25" Text=" of " HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBlock Height="25" Text="{Binding ElementName=MainDataGrid, Path=Items.Count}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsPinging, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsPinging, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                    <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Content="Stop Pinging" Command="{Binding Path=ViewModel.StopPingingClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" />
+                        <StackPanel.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=ViewModel.IsPinging, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=ViewModel.IsPinging, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                        <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                    </StackPanel>
+                    <StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                    <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBlock Foreground="GreenYellow" Height="25" Text="Max ping: " HorizontalAlignment="Left" VerticalAlignment="Top" Width="75"/>
+                        <TextBlock x:Name="tbMaxPingValue" Foreground="GreenYellow" Text="{Binding Path=ViewModel.MaxPingDisplay, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}"/>
+                    </StackPanel>
+                    <Slider x:Name="PingSlider"
+                            HorizontalAlignment="Left"
+		                    VerticalAlignment="Top"
+                            Width="125"
+                            Minimum="0"
+                            TickFrequency="10" 
+                            IsSnapToTickEnabled="True"
+                            Maximum="500"
+                            Value="{Binding Path=ViewModel.MaxPing, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" MinWidth="200" Orientation="Horizontal">
+                <!--<StackPanel>
+                    <Button x:Name="btnGetArmaList" Content="Get Notes" Command="{Binding Path=ViewModel.GetArmaListClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Margin="0,0,5,0" Height="25"/>
+                    <StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="StackPanel.IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                    <Setter Property="StackPanel.IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>-->
+                <StackPanel>
+                    <StackPanel>
+                        <Button x:Name="btnPingAllArmaList" Content="Refresh All Notes" Command="{Binding Path=ViewModel.PingAllArmaListClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Margin="0,0,5,0" Height="25"/>
+                        <StackPanel.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=ViewModel.IsPinging, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                        <Setter Property="StackPanel.IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=ViewModel.IsPinging, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                        <Setter Property="StackPanel.IsEnabled" Value="True"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                    </StackPanel>
+                    <StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="true">
+                                    <Setter Property="StackPanel.IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=ViewModel.IsSearching, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Value="false">
+                                    <Setter Property="StackPanel.IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+            </StackPanel>
+            <DockPanel Grid.Column="1" Grid.Row="2">
+                <DataGrid x:Name="MainDataGrid" Grid.Column="1" Grid.Row="2" Margin="10" MinHeight="300" MinWidth="300" AutoGenerateColumns="false" 
+                            ItemsSource="{Binding Path=ViewModel.ViewSource.View, IsAsync=True, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" 
+                            SelectionMode="Single" 
+                            CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True"
+                            MinRowHeight="25" RowHeight="25" 
+                            RowHeaderWidth="0"
+                            RowBackground="{x:Null}"
+                            ScrollViewer.CanContentScroll="True" 
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.IsDeferredScrollingEnabled="True"
+                            HorizontalGridLinesBrush="Black"
+                            VerticalGridLinesBrush="Black"
+                            EnableColumnVirtualization="True"
+                            EnableRowVirtualization="True"
+                            VirtualizingPanel.VirtualizationMode="Standard"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            SelectedItem="{Binding ViewModel.DataGridSelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" 
+                            clr:Commands.DataGridDoubleClickCommand="{Binding DataGridDoubleClick}">
+                    <DataGrid.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ViewModel.TheGridMouseDoubleClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" CommandParameter="{Binding ElementName=MainDataGrid, Path=SelectedItem}" />
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding Path=ViewModel.PingServerClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}">
+                                        <Image Source="{Binding ServerRefreshPingImage, Source={x:Static ArmaLauncher:Globals.Current}}"/>
+                                        <Button.ToolTip>
+                                            <TextBlock Text="ping"/>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="fav" SortMemberPath="Metadata.IsFavorite">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource styleFavoriteCheckBox}"
+                                              IsChecked="{Binding Metadata.IsFavorite, Mode=TwoWay}" 
+                                              Command="{Binding Path=ViewModel.ClickFavoriteServerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}">
+                                        <CheckBox.ToolTip>
+                                            <TextBlock Text="favorite"/>
+                                        </CheckBox.ToolTip>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="edit" SortMemberPath="Metadata.HasNotes">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <!--Command="{Binding DataContext.ClickNotesServerCommand,RelativeSource={RelativeSource Mode=Self}}-->
+                                    <CheckBox x:Name="cbNotesServer"                           
+                                              Style="{StaticResource styleNotesCheckBox}" 
+                                              IsChecked="{Binding Metadata.HasNotes, Mode=TwoWay}"
+                                              Command="{Binding Path=ViewModel.ClickNotesServerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}">
+                                        <CheckBox.ToolTip>
+                                            <TextBlock Text="edit server, notes, ip, port"/>
+                                        </CheckBox.ToolTip>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="name" SortMemberPath="Name" Width="450">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name, Mode=TwoWay}">
+                                        <TextBlock.ToolTip>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Column="0" Grid.Row="0" Text="ip / port" Margin="0,0,0,5"/>
+                                                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
+                                                    <TextBlock Text="{Binding Host, Mode=TwoWay}"/>
+                                                    <TextBlock Text=" : "/>
+                                                    <TextBlock Text="{Binding GamePort, Mode=TwoWay}"/>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="0" Grid.Row="1" Text="last played" Margin="0,0,0,5"/>
+                                                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Metadata.LastPlayedDate, Mode=TwoWay}" Margin="0,0,0,5"/>
+                                                <TextBlock Grid.Column="0" Grid.Row="2" Text="mods"/>
+                                                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding ModsDisplay, Mode=TwoWay}" TextWrapping="WrapWithOverflow"/>
+                                                <TextBlock Grid.Column="0" Grid.Row="3" Text="signatures"/>
+                                                <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SigNamesDisplay, Mode=TwoWay}" TextWrapping="WrapWithOverflow"/>
+                                            </Grid>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="ping" SortMemberPath="Metadata.Ping">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Metadata.Ping, Converter={StaticResource PingInt32ToStringConverter}}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Metadata.Ping, Converter={StaticResource PingConverter}}" Value="green">
+                                                        <Setter Property="Foreground" Value="Green"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Metadata.Ping, Converter={StaticResource PingConverter}}" Value="yellow">
+                                                        <Setter Property="Foreground" Value="Yellow"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Metadata.Ping, Converter={StaticResource PingConverter}}" Value="red">
+                                                        <Setter Property="Foreground" Value="Brown"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Metadata.Ping, Converter={StaticResource PingConverter}}" Value="gray">
+                                                        <Setter Property="Foreground" Value="gray"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="numplayers" SortMemberPath="NumPlayers">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock ToolTipService.ShowDuration="12000" Text="{Binding DisplayNumPlayers, Mode=TwoWay}">
+                                            <TextBlock.ToolTip>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="100" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="hint" />
+                                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="* if no numplayers, click one of the single 'green' icon refresh buttons on the grid row." TextWrapping="WrapWithOverflow" />
+                                                    <TextBlock Grid.Column="0" Grid.Row="1" Text="numplayers"/>
+                                                    <ListView ScrollViewer.VerticalScrollBarVisibility="Disabled" ClipToBounds="False"  Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Game.Players, Mode=TwoWay}">
+                                                        <ListView.View>
+                                                            <GridView>
+                                                                <GridViewColumn DisplayMemberBinding="{Binding Name}"/>
+                                                            </GridView>
+                                                        </ListView.View>
+                                                        <ListView.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Width="{Binding (FrameworkElement.ActualWidth), 
+                                                                    RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+                                                                    ItemWidth="{Binding (ListView.View).ItemWidth, 
+                                                                    RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                                    MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
+                                                                    ItemHeight="{Binding (ListView.View).ItemHeight, 
+                                                                    RelativeSource={RelativeSource AncestorType=ListView}}" />
+                                                            </ItemsPanelTemplate>
+                                                        </ListView.ItemsPanel>
+                                                    </ListView>
+                                                </Grid>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                        <Button Style="{DynamicResource NoChromeButton}" Command="{Binding Path=ViewModel.ClickPlayersImageCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}" Margin="5 0 0 0" >
+                                            <Image x:Name="imgPlayers" Source="Images/green_plus-16px.png" Height="16" Width="16">
+                                                <Image.ToolTip>
+                                                    <TextBlock Text="Click to add contacts"></TextBlock>
+                                                </Image.ToolTip>
+                                            </Image>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Enter Password?" SortMemberPath="Metadata.EnterPasswordOnConnect">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Metadata.EnterPasswordOnConnect, Mode=TwoWay}"
+                                              Command="{Binding Path=ViewModel.EnterPasswordOnConnectClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ArmaLauncher:Notes}}}">
+                                        <CheckBox.ToolTip>
+                                            <TextBlock Text="Enter password on connect?"/>
+                                        </CheckBox.ToolTip>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="password" SortMemberPath="Passworded">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image x:Name="imgPassworded">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Passworded, Mode=TwoWay}" Value="False">
+                                                        <Setter Property="Source" Value="Images/unlocked.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Passworded, Mode=TwoWay}" Value="True">
+                                                        <Setter Property="Source" Value="Images/locked.png"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                        <Image.ToolTip>
+                                            <StackPanel>
+                                                <TextBlock Text="Password required? "/>
+                                                <TextBlock Text="{Binding Passworded, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                        </Image.ToolTip>
+                                    </Image>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Country, Mode=TwoWay}" Header="country" />
+                        <DataGridTextColumn Binding="{Binding Mission, Mode=TwoWay}" Header="mission" />
+                        <DataGridTextColumn Binding="{Binding Island, Mode=TwoWay}" Header="map" />
+                        <DataGridTextColumn Binding="{Binding Version, Mode=TwoWay}" Header="version" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--TODO:areed wire in mod selector-->
+                <!--<Grid Grid.Column="2" Grid.Row ="1" Width ="200">
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions >
+                        <RowDefinition Height=".20" />
+                        <RowDefinition Height=".40" />
+                        <RowDefinition Height=".40" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation ="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
+                            <CheckBox Name="cbAutoSelectMods"  Margin="0,10,10,10" Height ="24"  Width ="Auto" IsChecked ="{Binding SelectedItemAutoMatch, Mode=TwoWay}">
+                                <FrameworkElement.Style >
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Style.Triggers >
+                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                <Setter Property="Control.Background" Value="{StaticResource AutoSelectMods}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </FrameworkElement.Style>
+                            </CheckBox>
+                            <Label Content="Auto select mods?" FontWeight ="Bold" Height ="24" Width ="Auto" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation ="Vertical">
+                        <Label Content="Current Mods:" FontWeight="Bold" Height ="24" Width ="Auto" />
+                        <ListView ItemsSource="{Binding SelectedItemClientMods, Mode=TwoWay}">
+                            <ListView.View >
+                                <GridView >
+                                    <GridViewColumn DisplayMemberBinding="{Binding}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation ="Vertical">
+                        <Label Content="Mods on this system compatible with this game:" FontWeight ="Bold" Height ="24" Width ="Auto" />
+                        <ListView ItemsSource="{Binding ListOfMods}">
+                            <ListView.View >
+                                <GridView >
+                                    <GridViewColumn DisplayMemberBinding="{Binding}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </Grid>-->
+                <DockPanel.Style>
+                    <Style TargetType="DockPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=MainDataGrid, Path=Items.Count}" Value="1">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=MainDataGrid, Path=Items.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DockPanel.Style>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Page>

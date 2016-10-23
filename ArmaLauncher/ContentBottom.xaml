@@ -1,0 +1,17 @@
+﻿<Models:BaseWindow x:Class="ArmaLauncher.ContentBottom"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                   xmlns:Models="clr-namespace:ArmaLauncher.Models" xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                   xmlns:tb="http://www.hardcodet.net/taskbar">
+
+    <StackPanel>
+        <!--<Frame Source="\LowerModernWindow.xaml"/>-->
+        
+        <tb:TaskbarIcon x:Name="myNotifyIcon"
+                    Visibility="Visible"
+                    ToolTipText="Arma Launcher"
+                    IconSource="/Images/favicon_32x32.ico"
+                    MenuActivation="LeftOrRightClick"
+                    PopupActivation="DoubleClick"/>
+    </StackPanel>
+</Models:BaseWindow>

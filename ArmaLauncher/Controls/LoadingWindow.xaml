@@ -1,0 +1,11 @@
+﻿<Window x:Name="loadingWindow"
+        x:Class="ArmaLauncher.Controls.LoadingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:control="clr-namespace:LoadingControl.Control" Visibility="Hidden" Width="0" Height="0" Opacity="0" BorderThickness="0"
+        Title="LoadingWindow" Topmost="True" Loaded="LoadingWindow_OnLoaded" Style="{DynamicResource NoChromeWindow}" WindowStyle="None"
+        Foreground="LightSkyBlue">
+    <Grid>
+        <control:LoadingAnimation x:Name="loadingAnimation" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+    </Grid>
+</Window>

@@ -1,0 +1,72 @@
+﻿<Popup x:Name="popEditServer" 
+        x:Class="ArmaLauncher.Controls.EditServerPopup"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            mc:Ignorable="d" 
+            Height="400" Width="600"
+        Placement="Top" HorizontalOffset="50" VerticalOffset="600" AllowsTransparency="True"
+       PreviewMouseRightButtonDown="EditServerPopup_OnPreviewMouseRightButtonDown">
+    <Canvas x:Name="ContentCanvas">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="LightGray" Width="600" Height="400" BorderBrush="Gray" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Background="#464646" Height="30" Margin="8,10,8,0" >
+                        <Label x:Name="lblTitleEditServer" Content="Edit Server" Foreground="Aquamarine" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Label Foreground="#000000" Content="IP:" FontWeight="Bold" Height="24" Width="Auto" />
+                        <TextBox x:Name="tbIp" Width="200" FontFamily="Arial" Margin="10"/>
+                        <Label Foreground="#000000" Content="Port:" FontWeight="Bold" Height="24" Width="Auto" />
+                        <TextBox  x:Name="tbPort" Width="200" FontFamily="Arial" Margin="10"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Label Foreground="#000000" Content="Steam Query Port:" FontWeight="Bold" Height="24" Width="Auto" Margin="160 0 0 0">
+                            <Label.ToolTip>
+                                <TextBlock Text="If unknown, leave blank."/>
+                            </Label.ToolTip></Label>
+                        <TextBox x:Name="tbSteamQueryPort" Width="200" FontFamily="Arial" Margin="10">
+                            <TextBox.ToolTip>
+                                <TextBlock Text="If unknown, leave blank."/>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Label Foreground="#000000" Content="Name:" FontWeight="Bold" Height="24" Width="Auto" />
+                        <TextBox x:Name="tbName" Width="500" FontFamily="Arial" Margin="10"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Label Foreground="#000000" Content="Notes:" FontWeight="Bold" Height="24" Width="Auto" />
+                        <TextBox x:Name="tbNotes" Width="500" FontFamily="Arial" Margin="10"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Button x:Name="btnEditServerSave" Content="Save" Height="25" Width="75" FontWeight="Bold" Click="btnEditServerSave_Click"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button  x:Name="btnEditServerCancel" Content="Cancel" Height="25"  Width="75" FontWeight="Bold" Click="btnEditServerCancel_Click"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Canvas>
+</Popup>

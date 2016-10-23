@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="servers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="script" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="id" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="server" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="country" type="xs:string" minOccurs="0" />
+              <xs:element name="gamename" type="xs:string" minOccurs="0" />
+              <xs:element name="host" type="xs:string" minOccurs="0" />
+              <xs:element name="island" type="xs:string" minOccurs="0" />
+              <xs:element name="mission" type="xs:string" minOccurs="0" />
+              <xs:element name="mod" type="xs:string" minOccurs="0" />
+              <xs:element name="name" type="xs:string" minOccurs="0" />
+              <xs:element name="platform" type="xs:string" minOccurs="0" />
+              <xs:element name="required-version" type="xs:string" minOccurs="0" />
+              <xs:element name="state" type="xs:string" minOccurs="0" />
+              <xs:element name="version" type="xs:string" minOccurs="0" />
+              <xs:element name="battleye" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="battleye_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="created-at" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="created-at_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="dedicated" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="dedicated_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="id" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="id_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="language" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="language_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="lat" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="lat_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="lng" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="lng_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mode" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="mode_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="nil" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="modhash" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="modhash_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="nil" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="passworded" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="passworded_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="players" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="players_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="port" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="port_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="signatures" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="signatures_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="nil" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="updated-at" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="updated-at_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="verify-signatures" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="verify-signatures_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="type" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="servers" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

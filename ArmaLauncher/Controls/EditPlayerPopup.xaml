@@ -1,0 +1,79 @@
+﻿<Popup x:Name="popEditPlayer" 
+        x:Class="ArmaLauncher.Controls.EditPlayerPopup"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            mc:Ignorable="d" 
+            Height="400" Width="600" AllowsTransparency="True"
+       PreviewMouseRightButtonDown="EditPlayerPopup_OnPreviewMouseRightButtonDown">
+    <Canvas x:Name="ContentCanvas">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="LightGray" Width="600" Height="290" BorderBrush="Gray" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Background="#464646" Height="30" Margin="8,10,8,0" >
+                        <Label x:Name="lblTitleEditPlayer" Content="Player Notes" Foreground="Aquamarine" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Label Content="Name:" FontWeight="Bold" Height="24" Width="Auto" Foreground="#000000" />
+                        <TextBox x:Name="tbName" Width="500" Height="24" FontFamily="Arial" FontSize="16" Margin="10" Foreground="#464646" IsReadOnly="True">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Foreground" Value="DarkTurquoise"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal"  Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                        <Label Foreground="#000000" Content="Is Friend: " FontWeight="Bold" Height="24" Width="Auto" />
+                        <CheckBox Click="Click_PlayerIsFriend"
+                                              IsChecked="{Binding PlayerItem.IsFriend, Mode=TwoWay}">
+                            <CheckBox.ToolTip>
+                                <TextBlock Text="Is this a friend?"/>
+                            </CheckBox.ToolTip>
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15 0 0 0">
+                        <Label Foreground="#000000" Content="Is Enemy: " FontWeight="Bold" Height="24" Width="Auto" />
+                        <CheckBox Click="Click_PlayerIsEnemy"
+                                    IsChecked="{Binding PlayerItem.IsEnemy, Mode=TwoWay}">
+                            <CheckBox.ToolTip>
+                                <TextBlock Text="Is this an enemy?"/>
+                            </CheckBox.ToolTip>
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Label Foreground="#000000" Content="Notes:" FontWeight="Bold" Height="24" Width="Auto" />
+                        <TextBox x:Name="tbNotes" Width="500" Height="80" FontFamily="Arial" Margin="10"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Center">
+                        <Button x:Name="btnEditPlayerSave" Content="Save" Height="25" Width="75" FontWeight="Bold" Click="btnEditPlayerSave_Click"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button  x:Name="btnEditPlayerCancel" Content="Cancel" Height="25"  Width="75" FontWeight="Bold" Click="btnEditPlayerCancel_Click"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Canvas>
+</Popup>

@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArmaLauncher", "ArmaLauncher.csproj", "{28BDB47D-C08B-4ED3-989D-5B3A2C22DD15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamLib", "..\aQueryLib\SteamLib.csproj", "{5B3CF888-4C4E-4C9D-A8C0-AE0B0EE3EB8A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://76.22.29.76:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ArmaLauncher.csproj
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = ..\\aQueryLib\\SteamLib.csproj
+		SccProjectName2 = ../aQueryLib
+		SccLocalPath2 = ..\\aQueryLib
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28BDB47D-C08B-4ED3-989D-5B3A2C22DD15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28BDB47D-C08B-4ED3-989D-5B3A2C22DD15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28BDB47D-C08B-4ED3-989D-5B3A2C22DD15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28BDB47D-C08B-4ED3-989D-5B3A2C22DD15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B3CF888-4C4E-4C9D-A8C0-AE0B0EE3EB8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B3CF888-4C4E-4C9D-A8C0-AE0B0EE3EB8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B3CF888-4C4E-4C9D-A8C0-AE0B0EE3EB8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B3CF888-4C4E-4C9D-A8C0-AE0B0EE3EB8A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

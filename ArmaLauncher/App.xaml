@@ -1,0 +1,444 @@
+<Application x:Class="ArmaLauncher.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StartupUri="MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:p="clr-namespace:ArmaLauncher.Properties" xmlns:myNamespace="clr-namespace:ArmaLauncher.Behaviors" xmlns:viewModel="clr-namespace:ArmaLauncher.ViewModel">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
+                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <UIElement x:Key="TrayToolTip" />
+            <!--<vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:ArmaLauncher.ViewModel" />-->
+            <p:Settings x:Key="Settings" />
+            <myNamespace:PingInt32ToStringConverter x:Key="PingInt32ToStringConverter" />
+            <myNamespace:ComparisonConverter x:Key="PingConverter" GreenGreaterThanOrEqualTo="0" GreenLessThanOrEqualTo="160" YellowGreaterThanOrEqualTo="160" YellowLessThanOrEqualTo="275" RedGreaterThanOrEqualTo="275" RedLessThanOrEqualTo="10000" GrayGreaterThanOrEqualTo="10001" GrayLessThanOrEqualTo="999999" />
+            <Style x:Key="NoChromeWindow" TargetType="{x:Type Window}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Padding" Value="1" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Window}">
+                            <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="#ADADAD" />
+                                    <Setter Property="Opacity" TargetName="Chrome" Value="0.5" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Padding" Value="1" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="#ADADAD" />
+                                    <Setter Property="Opacity" TargetName="Chrome" Value="0.5" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="styleFavoriteCheckBox" TargetType="{x:Type CheckBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image x:Name="imageCheckBox" Width="20" Height="20" Source="Images\star_empty_50.png" />
+                                <ContentPresenter VerticalAlignment="Center" />
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="imageCheckBox" Property="Source" Value="Images\star_empty_50.png" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="imageCheckBox" Property="Source" Value="Images\star_fav_50.png" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="styleDeleteCheckBox" TargetType="{x:Type CheckBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image x:Name="imageCheckBox" Width="20" Height="20" Source="Images\delete_50.png" />
+                                <ContentPresenter VerticalAlignment="Center" />
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="imageCheckBox" Property="Source" Value="Images\delete_50.png" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="imageCheckBox" Property="Source" Value="Images\delete_selected_50.png" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="styleNotesCheckBox" TargetType="{x:Type CheckBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image x:Name="imageCheckBox" Width="20" Height="20" Source="Images\notes_empty_50.png" />
+                                <ContentPresenter VerticalAlignment="Center" />
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="imageCheckBox" Property="Source" Value="Images\notes_empty_50.png" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="imageCheckBox" Property="Source" Value="Images\notes_50.png" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--Servers-->
+            <VisualBrush x:Key="AutoSelectMods" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Auto select mods?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <!-- App Settings -->
+            <VisualBrush x:Key="CloseLauncherApp" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Close launcher at game connect?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: -mod=@DayZPanthera;@DayZ_Epoch" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2Path" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: c:\Arma2\" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="WindowedMode" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Launch game in Windowed mode?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="GlobalAutoMatchClientMod" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Launch game in Windowed mode?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2OAPath" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: c:\Arma2\" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma3Path" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: c:\Arma3\" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="DebugModeDoNotLaunchGame" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Load servers on Launcher startup?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="DebugModeTestLocalOnly" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Ping servers on Launcher startup? (slows server list load time)" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="RefreshExtended" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Deep refresh of servers on Launcher startup? (slows server list load time)" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma3LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: -mod=@CBA_A3;@DayZA3_Chernarus;@AllInArma\ProductDummies;@AllInArma\Core;@AllInArma\PostA3" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="IncludeArma2PathInArma3LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Include Arma 2 path in Arma 3 launch parameters?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="IncludeArma2OAPathInArma3LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Include Arma 2 OA path in Arma 3 launch parameters?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="SelectedGameType" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Selected Game type to query." />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="IncludeAddtionalArmaPaths1InArma2LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Include additional 'Arma Paths 1' in Arma 2 launch parameters?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="IncludeAdditionalArmaPaths2InArma2LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Include additional 'Arma Paths 2' in Arma 2 launch parameters?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="IncludeAdditionalArmaPaths1InArma3LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Include additional 'Arma Paths 1' in Arma 3 launch parameters?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="IncludeAdditionalArmaPaths2InArma3LaunchParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Include additional 'Arma Paths 2' in Arma 3 launch parameters?" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="AdditionalArmaPaths1" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: c:\Arma2\Arma2OA\Expansion" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="AdditionalArmaPaths2" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: c:\Arma3\@AllInArma\PostA3" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2OAExe" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: Arma2OA.exe" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2OAExeParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: 0 1" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2ModParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value:  -mod=@CBA;@DayZA3_Chernarus;@AllInArma" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2ExtraParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: -nosplash -skipintro -world=empty -noFilePatching" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma3Exe" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: Arma3.exe" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma3ExeParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: 0 1" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma3ModParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value:  -mod=@CBA_A3;@EpochMod;@AllInArma" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma3ExtraParams" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: -nosplash -skipintro -world=empty -noFilePatching" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="Arma2SupportedModList" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: @DayZ;@DayZEpoch" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <VisualBrush x:Key="AppNotes" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="example value: @AllInArma;@BreakingPoint" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+            <!-- Servers -->
+            <VisualBrush x:Key="SearchFilter" TileMode="None" Stretch="None" AlignmentX="Left">
+                <VisualBrush.Transform>
+                    <TranslateTransform X="5" Y="0" />
+                </VisualBrush.Transform>
+                <VisualBrush.Visual>
+                    <Grid>
+                        <TextBlock FontStyle="Italic" Foreground="GreenYellow" Opacity="0.3" Text="Search filter" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

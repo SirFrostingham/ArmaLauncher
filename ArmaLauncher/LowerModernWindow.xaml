@@ -1,0 +1,17 @@
+﻿<mui:ModernWindow x:Class="ArmaLauncher.LowerModernWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        Title="ModernWindow" Height="300" Width="300">
+
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup>
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="servers" Source="/Servers.xaml" />
+                <mui:Link DisplayName="favorites" Source="/Favorites.xaml"/>
+                <mui:Link DisplayName="recents" Source="/Recent.xaml" />
+                <mui:Link DisplayName="notes" Source="/Notes.xaml" />
+                <mui:Link DisplayName="players" Source="/Players.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
+</mui:ModernWindow>
