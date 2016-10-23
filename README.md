@@ -16,12 +16,13 @@ What this app can do:
 
 	- Server lister for any Steam game (Arma 3, DayZ, Arma 2, ARK, Emperyion currently included)
 		- The new target appids just need to be threaded through.
+	- Launch game and connect to target server with customized parameters
 	- Add favorite servers
 	- Write notes about servers
 	- Add friends and enemies
 	- Track friends and enemies
 	- Recent servers
-	- Settings to configure your game launch directories and launch parameters
+	- Settings: Configure your game launch directories and launch parameters
 
 
 Where are we at with this application?
